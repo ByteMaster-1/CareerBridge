@@ -7,7 +7,7 @@ import userRoute from "./routes/user.route.js";
 import companyRoute from "./routes/company.route.js";
 import jobRoute from "./routes/job.route.js";
 import applicationRoute from "./routes/application.route.js";
-
+import path from 'path';
 dotenv.config({});
 
 const app = express();
@@ -22,6 +22,14 @@ const corsOptions = {
 }
 
 app.use(cors(corsOptions));
+
+if(process.env.NODE_ENV==='production'){
+    app.use(express.static(path.join(__dirname,"./frontend/dist")));
+
+    app.get('*',(req,res)=>{
+        res.sendFile(path.join(__dirname,'./frontend/dist/index.html'));
+    });
+}
 
 const PORT = process.env.PORT || 3000;
 
